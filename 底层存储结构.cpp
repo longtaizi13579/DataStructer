@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include <Windows.h>
+#include <conio.h>
 #define OK 1
 #define OVERFLOW -1
 int g_Linenumber = 0;
@@ -44,21 +45,26 @@ Linelist LineInsert_L(Linelist &L, int i)    //插入一行到第i个节点处
 	s->heapptr_b.str = NULL;
 	s->heapptr_c.str = NULL;
 	s->heapptr_d.str = NULL;
+	s->heapptr_a.length = 0;
+	s->heapptr_b.length = 0;
+	s->heapptr_c.length = 0;
+	s->heapptr_d.length = 0;
+
 	s->next = ptr->next;
 	ptr->next = s;
 	return s;
 }
-Hstring Add_A_Word(Linelist &line, Hstring current_heap,int count_word,char str)
+Hstring Add_A_Word(Linelist line, Hstring current_heap,int count_word,char str)
 //在当前堆的末尾加入一个字符
 {
 	if (count_word <= 99)
 	{
-		current_heap.length = count_word;
+		line->heapptr_a.length = count_word;
 		current_heap.str[count_word] = str;
 	}
 	else if (count_word == 100)//第101个字符存在第二个堆
 	{
-		current_heap.length = count_word;
+		line->heapptr_a.length = count_word;
 		line->heapptr_b.str = (char*)malloc(100 * sizeof(char));
 		memset(line->heapptr_b.str, '\0', 100 * sizeof(char));
 		current_heap.str = line->heapptr_b.str;
@@ -66,12 +72,12 @@ Hstring Add_A_Word(Linelist &line, Hstring current_heap,int count_word,char str)
 	}
 	else if (count_word > 100 && count_word <= 199)
 	{
-		current_heap.length = count_word-100;
+		line->heapptr_b.length = count_word-100;
 		current_heap.str[count_word - 100] = str;
 	}
 	else if (count_word == 200)
 	{
-		current_heap.length = count_word-100;
+		line->heapptr_b.length = count_word-100;
 		line->heapptr_c.str = (char*)malloc(100 * sizeof(char));
 		memset(line->heapptr_c.str, '\0', 100 * sizeof(char));
 		current_heap.str = line->heapptr_c.str;//转存C堆
@@ -79,12 +85,12 @@ Hstring Add_A_Word(Linelist &line, Hstring current_heap,int count_word,char str)
 	}
 	else if (count_word > 200 && count_word <= 299)
 	{
-		current_heap.length = count_word-200;
+		line->heapptr_c.length = count_word-200;
 		current_heap.str[count_word - 200] = str;
 	}
 	else if (count_word == 300)
 	{
-		current_heap.length = count_word-200;
+		line->heapptr_c.length = count_word-200;
 		line->heapptr_d.str = (char*)malloc(100 * sizeof(char));
 		memset(line->heapptr_d.str, '\0', 100 * sizeof(char));
 		current_heap.str = line->heapptr_d.str;
@@ -92,7 +98,7 @@ Hstring Add_A_Word(Linelist &line, Hstring current_heap,int count_word,char str)
 	}
 	else if (count_word > 300 && count_word <= 398)
 	{
-		current_heap.length = count_word-300;
+		line->heapptr_d.length = count_word-300;
 		current_heap.str[count_word - 300] = str;
 	}
 	return current_heap;
@@ -106,12 +112,14 @@ int CreateFile(Linelist &L)//创建一个文件
 	line->heapptr_a.str = (char*)malloc(100 * sizeof(char));//分配堆
 	memset(line->heapptr_a.str, '\0', 100 * sizeof(char));//数组全部初始化为/0
 	current_heap = line->heapptr_a;
-	scanf_s("%c",&str,1);
+	str = _getch();
+	putchar(str);
 	while (str != '#')//首次读取  设终止符为#
 	{
-		if (str == '\n')
+		if (str == 13)
 		{
 			current_heap=Add_A_Word(line, current_heap, count_word, str);
+			printf("\n");
 			count_word = 0;
 			line = LineInsert_L(L, g_Linenumber + 1);//新建一行链表
 			line->heapptr_a.str = (char*)malloc(100 * sizeof(char));
@@ -125,7 +133,8 @@ int CreateFile(Linelist &L)//创建一个文件
 			count_word++;
 		}
 
-		scanf_s("%c", &str,1);
+		str=_getch();
+		putchar(str);
 	}
 	return OK;
 }
@@ -134,6 +143,7 @@ int PrintLine(Linelist L)//打印整个文件
 	Linelist l = L;
 	while (l != NULL)
 	{
+		printf("\n 当前文件如下：\n");
 		if (l->heapptr_a.str != NULL)
 		{
 			int count = 0;
@@ -142,7 +152,7 @@ int PrintLine(Linelist L)//打印整个文件
 				printf("%c", l->heapptr_a.str[count]);
 				count++;
 			}
-			printf("A####   %d", l->heapptr_a.length);
+			printf("\nA块长度：%d", l->heapptr_a.length);
 
 		}
 		if (l->heapptr_b.str != NULL)
@@ -153,7 +163,7 @@ int PrintLine(Linelist L)//打印整个文件
 				printf("%c", l->heapptr_b.str[count]);
 				count++;
 			}
-			printf("B####   %d", l->heapptr_b.length);
+			printf("\nB块长度：%d", l->heapptr_b.length);
 		}
 		if (l->heapptr_c.str != NULL)
 		{
@@ -163,7 +173,7 @@ int PrintLine(Linelist L)//打印整个文件
 				printf("%c", l->heapptr_c.str[count]);
 				count++;
 			}
-			printf("C####   %d", l->heapptr_c.length);
+			printf("\nC块长度：%d", l->heapptr_c.length);
 		}
 		if (l->heapptr_d.str != NULL)
 		{
@@ -173,7 +183,7 @@ int PrintLine(Linelist L)//打印整个文件
 				printf("%c", l->heapptr_d.str[count]);
 				count++;
 			}
-			printf("D####   %d", l->heapptr_d.length);
+			printf("\nD块长度：%d", l->heapptr_d.length);
 		}
 
 		l = l->next;
