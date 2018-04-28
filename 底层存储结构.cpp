@@ -118,8 +118,12 @@ int CreateFile(Linelist &L)//创建一个文件
 	{
 		if (str == 13)
 		{
+<<<<<<< Updated upstream
 			current_heap=Add_A_Word(line, current_heap, count_word, str);
 			printf("\n");
+=======
+			line->heapptr_a=Add_A_Word(line, current_heap, count_word, str);
+>>>>>>> Stashed changes
 			count_word = 0;
 			line = LineInsert_L(L, g_Linenumber + 1);//新建一行链表
 			line->heapptr_a.str = (char*)malloc(100 * sizeof(char));
@@ -129,7 +133,7 @@ int CreateFile(Linelist &L)//创建一个文件
 		}
 		else
 		{
-			current_heap = Add_A_Word(line, current_heap, count_word, str);
+			line->heapptr_a = Add_A_Word(line, current_heap, count_word, str);
 			count_word++;
 		}
 
