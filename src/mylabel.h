@@ -1,19 +1,19 @@
 #ifndef MYLABEL_H
 #define MYLABEL_H
+#include <QLabel>
+//#include <QMainWindow>
 
-#include <QMainWindow>
-
-namespace Ui {
+/*namespace Ui {
 class MyLabel;
 }
-
-class MyLabel : public QMainWindow
+*/
+class MyLabel : public QLabel
 {
     Q_OBJECT
 
 public:
     explicit MyLabel(QWidget *parent = 0);
-    ~MyLabel();
+/*    ~MyLabel();
 
 protected:
     void focusInEvent(QFocusEvent * ev);//获取焦点
@@ -23,6 +23,6 @@ protected:
 
 private:
     Ui::MyLabel *ui;
-};
+*/};
 
 #endif // MYLABEL_H
