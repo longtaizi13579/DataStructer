@@ -105,7 +105,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     myLabel=new MyLabel(this);
-    myLabel->setText(tr("testLabel"));
+    //myLabel->setText(tr("testLabel"));
     QGridLayout * layout = new QGridLayout(this);
     layout->addWidget(myLabel);
     ui->centralWidget->setLayout(layout);
@@ -127,8 +127,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QToolBar *toolBar = addToolBar(tr("&File"));
     toolBar->addAction(openAction);
     toolBar->addAction(saveAction);
-    textEdit = new QTextEdit(this);
-    setCentralWidget(textEdit);
+    //textEdit = new QTextEdit(this);
+    //setCentralWidget(textEdit);
 
     CreateFirstLine(corehead);
     Linelist line = corehead;
@@ -143,11 +143,11 @@ MainWindow::~MainWindow()
 }
 void MyLabel::focusInEvent(QFocusEvent * ev)
 {
-    setText(tr("In"));
+
 }
 void MyLabel::focusOutEvent(QFocusEvent * ev)
 {
-    setText(tr("FocusOut"));
+
 }
 void MyLabel::keyPressEvent(QKeyEvent * ev)
 {
@@ -161,7 +161,7 @@ void MyLabel::keyPressEvent(QKeyEvent * ev)
         //不是Backspace
         str += ev->text();//在原字符串后添加新输入的字符
         if(ev->text()==13)
-            str.append("\n");
+          str.append("\n");
         setText(str);//显示新字符串
     }
 }
@@ -213,6 +213,7 @@ void MainWindow::saveFile()
 void MainWindow::openFile()
 {
 
+    QString str = myLabel->text();//获取原字符串
     //释放原来堆(没做)
     filename=NULL;
     g_Linenumber = 0;
@@ -224,7 +225,7 @@ void MainWindow::openFile()
     memset(current_heap->str, '\0', 102 * sizeof(char));//数组全部初始化为/0
 
     QString path = QFileDialog::getOpenFileName(this, tr("Save File"), ".", tr("Text Files(*.txt)"));
-    textEdit->clear();
+    //textEdit->clear();
     QByteArray ba = path.toLatin1();
     filename=ba.data();
     //读入
@@ -274,7 +275,7 @@ void MainWindow::openFile()
                         while (heapptr->str != NULL && count <= 99 && heapptr->str[count] != '\0')
                         {
                             if (heapptr->str[count] =='\n')
-                                textEdit->insertPlainText("\n");
+                                str.append("\n");
                             else if(heapptr->str[count]<0&&number_count<2)
                            {
                                 receive[number_count]=heapptr->str[count];
@@ -284,7 +285,7 @@ void MainWindow::openFile()
                             {
                                 receive[number_count]=heapptr->str[count];
                                 number_count=0;
-                                textEdit->insertPlainText(receive);
+                                str.append(receive);
                                 memset(receive,'\0',4*sizeof(char));
                              }
                             ++count;
@@ -294,7 +295,8 @@ void MainWindow::openFile()
                     //printf("有%d个字", l->word_number-1);//-1为了去掉换行符
                     l = l->next;
                 }
-               textEdit->insertPlainText("\n");
+               str.append("\n");
+               myLabel->setText(str);
         }
      else {
         QMessageBox::warning(this, tr("Path"), tr("You did not select any file."));

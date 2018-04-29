@@ -4,6 +4,10 @@
 #include "mylabel.h"
 #include <stdio.h>
 #include<stdlib.h>
+#include <QFocusEvent>
+#include <QLabel>
+#include <QKeyEvent>
+#include <QInputMethodEvent>
 #define MY_HEAP_NUMBER 4
 namespace Ui {
 class MainWindow;
@@ -43,7 +47,7 @@ private:
     Linelist corehead;//头结点指针
     HstringList current_heap;//当前节点指针
     char* filename;/* 用于存放文件名 */
-    QTextEdit *textEdit;
+    //QTextEdit *textEdit;
 };
 
 #endif // MAINWINDOW_H
