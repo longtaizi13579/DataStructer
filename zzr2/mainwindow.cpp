@@ -103,13 +103,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     myLabel=new MyLabel(this);
-    //myLabel->setText(tr("testLabel"));
+    myLabel->setStyleSheet("qproperty-alignment: 'AlignTop | AlignLeft';");
+    myLabel->setText(tr("testLabel"));
+    //myLabel->move(-100,-100);
     QGridLayout * layout = new QGridLayout(this);
     layout->addWidget(myLabel);
     ui->centralWidget->setLayout(layout);
-
+    myLabel->setWordWrap(true);//自动换行
+    myLabel->move(0,0);
     openAction = new QAction(QIcon(":/images/file-open"), tr("&Open..."), this);
     openAction->setShortcuts(QKeySequence::Open);
     openAction->setStatusTip(tr("Open an existing file"));
@@ -129,7 +131,6 @@ MainWindow::MainWindow(QWidget *parent) :
     toolBar->addAction(saveAction);
     //textEdit = new QTextEdit(this);
     //setCentralWidget(textEdit);
-
     CreateFirstLine(corehead);
     Linelist line = corehead;
     current_heap = line->heapptr;
@@ -143,6 +144,8 @@ MainWindow::~MainWindow()
 }
 void MyLabel::focusInEvent(QFocusEvent * ev)
 {
+    move(0,0);
+    setText(tr("focusin"));
 
 }
 void MyLabel::focusOutEvent(QFocusEvent * ev)
@@ -152,7 +155,6 @@ void MyLabel::focusOutEvent(QFocusEvent * ev)
 void MyLabel::keyPressEvent(QKeyEvent * ev)
 {
     QString str = text();//获取原字符串
-
     if (ev->key() == Qt::Key_Backspace){
         //如果按键是Backspace
         str.chop(1);//删除原字符串最后一个字符
@@ -168,7 +170,6 @@ void MyLabel::keyPressEvent(QKeyEvent * ev)
 void MyLabel::inputMethodEvent(QInputMethodEvent * ev)
 {
     QString str = text();//获取原字符串
-
     str += ev->commitString();//原字符串后接上输入的中文字符串
     setText(str);//显示新字符串
 }
