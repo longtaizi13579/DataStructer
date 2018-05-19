@@ -38,6 +38,7 @@ public:
 private slots:
     void openFile();
     void saveFile();
+    void slot_ScroolWidget(int);
 
 private:
     Ui::MainWindow *ui;

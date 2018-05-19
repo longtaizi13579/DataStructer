@@ -117,6 +117,8 @@ MainWindow::MainWindow(QWidget *parent) :
     openAction->setStatusTip(tr("Open an existing file"));
     connect(openAction, &QAction::triggered, this, &MainWindow::openFile);
 
+    connect(ui->verticalScrollBar,SIGNAL(valueChanged(int)),this,SLOT(slot_ScroolWidget(int)));
+
     saveAction = new QAction(QIcon(":/images/file-save"), tr("&Save..."), this);
     saveAction->setShortcuts(QKeySequence::Save);
     saveAction->setStatusTip(tr("Save a new file"));
@@ -147,6 +149,11 @@ void MyLabel::focusInEvent(QFocusEvent * ev)
     move(0,0);
     setText(tr("focusin"));
 
+}
+void MainWindow::slot_ScroolWidget(int value)
+{
+    double p=static_cast<double>(value)/static_cast<double>(ui->verticalScrollBar->maximum());
+    myLabel->move(0,-(myLabel->height()-350)*p);
 }
 void MyLabel::focusOutEvent(QFocusEvent * ev)
 {
